@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>+TER — Plataforma de Cocreación para el Desarrollo Territorial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+/* ── RESET ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+
+/* ── TOKENS: Notion-first palette ── */
+:root{
+  /* 70% whites / creams */
+  --page:    #FFFFFF;
+  --page2:   #F7F6F3;
+  --page3:   #EEECEA;
+  --page4:   #E6E4E0;
+  --border:  #D3CECA;
+  --border2: rgba(0,0,0,0.08);
+
+  /* 20% blacks / inks */
+  --ink:     #1A1A1A;
+  --ink2:    #3D3D3A;
+  --ink3:    #787774;
+  --ink4:    #AFADAA;
+  --dark:    #0a0a08;
+  --dark2:   #111110;
+  --dark3:   #1e1f1c;
+
+  /* 10% orange — acento +TER */
+  --orange:  #ff6b00;
+  --orange2: #e55f00;
+  --orange3: #ff8c33;
+  --orange-bg: rgba(255,107,0,0.07);
+  --orange-bg2:rgba(255,107,0,0.12);
+
+  /* Colores de sistema (sin cambiar) */
+  --green:   #3a6b36;
+  --green2:  #4d8a47;
+  --green3:  #c8dfc5;
+  --blue:    #2eabcc;
+  --blue-bg: rgba(46,171,204,0.08);
+  --amber:   #ba7517;
+  --amber-bg:rgba(186,117,23,0.08);
+  --purple:  #534ab7;
+  --purple-bg:rgba(83,74,183,0.08);
+  --teogreen:#7dc242;
+
+  --radius-sm:4px;
+  --radius:  8px;
+  --radius-lg:12px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+}
+
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--page);
+  color:var(--ink);
+  line-height:1.72;
+  font-weight:400;
+  overflow-x:hidden;
+}
+
+/* ── NOTION DOT PATTERN (subtle) ── */
+.dot-bg{
+  background-image:radial-gradient(circle,var(--border) 1px,transparent 1px);
+  background-size:22px 22px;
+  background-color:var(--page2);
+}
+
+/* ── NAV — Notion header style ── */
+nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,255,255,0.94);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--border);
+  padding:0 2rem;height:52px;
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+}
+.nav-left{display:flex;align-items:center;gap:1.4rem}
+.nav-logo{
+  display:flex;align-items:center;gap:.4rem;
+  font-family:'DM Sans',sans-serif;font-size:.92rem;font-weight:600;
+  color:var(--ink);text-decoration:none;
+}
+.nav-logo-icon{
+  width:26px;height:26px;background:var(--dark);border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Space Mono',monospace;font-size:.55rem;font-weight:700;
+  color:var(--orange);letter-spacing:.04em;
+}
+.nav-sep{width:1px;height:18px;background:var(--border)}
+.nav-page{
+  font-size:.85rem;color:var(--ink2);font-weight:400;
+}
+.nav-links{display:flex;gap:.2rem;list-style:none}
+.nav-links a{
+  font-size:.82rem;color:var(--ink3);text-decoration:none;
+  padding:.3rem .6rem;border-radius:var(--radius-sm);
+  transition:background .15s,color .15s;
+}
+.nav-links a:hover{background:var(--page3);color:var(--ink)}
+.nav-cta{
+  font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:500;
+  padding:.35rem 1rem;background:var(--dark);color:var(--page);
+  border-radius:var(--radius-sm);text-decoration:none;
+  transition:background .15s;white-space:nowrap;
+}
+.nav-cta:hover{background:var(--orange);color:var(--page)}
+
+/* ── HERO — Notion page style ── */
+.hero{
+  max-width:900px;margin:0 auto;
+  padding:4rem 2rem 3rem;
+  position:relative;
+}
+.hero-breadcrumb{
+  display:flex;align-items:center;gap:.4rem;
+  font-size:.78rem;color:var(--ink4);margin-bottom:2rem;
+}
+.hero-breadcrumb span{color:var(--ink3)}
+.hero-breadcrumb .sep{color:var(--border)}
+
+.hero-cover{
+  width:100%;height:200px;border-radius:var(--radius-lg);
+  background:var(--dark);margin-bottom:2.5rem;
+  position:relative;overflow:hidden;
+  display:flex;align-items:flex-end;
+}
+.hero-cover-pattern{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,107,0,.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,107,0,.06) 1px,transparent 1px);
+  background-size:48px 48px;
+}
+.hero-cover-accent{
+  position:absolute;top:0;left:0;right:0;height:3px;
+  background:var(--orange);
+}
+.hero-cover-content{
+  position:relative;z-index:1;padding:1.5rem 2rem;width:100%;
+  display:flex;align-items:flex-end;justify-content:space-between;
+}
+.hero-cover-tag{
+  font-family:'Space Mono',monospace;font-size:.62rem;
+  letter-spacing:.16em;color:var(--orange);text-transform:uppercase;
+}
+.hero-cover-date{
+  font-family:'Space Mono',monospace;font-size:.6rem;
+  letter-spacing:.1em;color:rgba(255,255,255,.35);
+}
+
+.hero-icon{font-size:3rem;margin-bottom:.5rem;line-height:1}
+.hero-title{
+  font-size:2.6rem;font-weight:700;color:var(--ink);
+  line-height:1.15;letter-spacing:-.02em;margin-bottom:.6rem;
+}
+.hero-title .acc{color:var(--orange)}
+.hero-tagline{
+  font-size:1.1rem;color:var(--ink2);font-weight:400;
+  line-height:1.6;max-width:56ch;margin-bottom:2rem;
+}
+
+/* Notion property table */
+.props-table{
+  border:1px solid var(--border);border-radius:var(--radius-lg);
+  overflow:hidden;margin-bottom:2rem;
+  box-shadow:var(--shadow);
+}
+.props-row{
+  display:grid;grid-template-columns:140px 1fr;
+  border-bottom:1px solid var(--border);
+  transition:background .12s;
+}
+.props-row:last-child{border-bottom:none}
+.props-row:hover{background:var(--page3)}
+.prop-key{
+  padding:.6rem .9rem;
+  font-size:.8rem;font-weight:500;color:var(--ink3);
+  display:flex;align-items:center;gap:.4rem;
+  background:var(--page2);border-right:1px solid var(--border);
+}
+.prop-key-icon{font-size:.78rem;opacity:.6}
+.prop-val{
+  padding:.6rem .9rem;font-size:.85rem;color:var(--ink);
+  display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;
+}
+.prop-tag{
+  font-size:.72rem;font-weight:500;padding:.15rem .5rem;
+  border-radius:20px;display:inline-flex;align-items:center;
+}
+.tag-orange{background:var(--orange-bg2);color:var(--orange2)}
+.tag-green{background:rgba(58,107,54,.1);color:var(--green)}
+.tag-blue{background:var(--blue-bg);color:var(--blue)}
+.tag-gray{background:var(--page3);color:var(--ink3)}
+
+.hero-btns{display:flex;gap:.6rem;flex-wrap:wrap}
+.btn-primary{
+  font-size:.85rem;font-weight:500;padding:.55rem 1.2rem;
+  background:var(--dark);color:var(--page);
+  border-radius:var(--radius-sm);text-decoration:none;
+  display:inline-flex;align-items:center;gap:.4rem;
+  transition:background .15s;border:none;cursor:pointer;
+}
+.btn-primary:hover{background:var(--orange)}
+.btn-secondary{
+  font-size:.85rem;font-weight:400;padding:.55rem 1.2rem;
+  background:transparent;color:var(--ink2);
+  border:1px solid var(--border);border-radius:var(--radius-sm);
+  text-decoration:none;display:inline-flex;align-items:center;gap:.4rem;
+  transition:all .15s;cursor:pointer;
+}
+.btn-secondary:hover{border-color:var(--ink3);background:var(--page3)}
+.btn-orange{
+  font-size:.85rem;font-weight:500;padding:.55rem 1.2rem;
+  background:var(--orange);color:var(--page);
+  border-radius:var(--radius-sm);text-decoration:none;
+  display:inline-flex;align-items:center;gap:.4rem;
+  transition:background .15s;border:none;cursor:pointer;
+}
+.btn-orange:hover{background:var(--orange2)}
+
+/* ── DIVIDER — Notion style ── */
+.n-divider{
+  border:none;border-top:1px solid var(--border);
+  margin:0;
+}
+.section-divider{
+  max-width:900px;margin:0 auto;
+  border:none;border-top:1px solid var(--border);
+}
+
+/* ── SECTIONS ── */
+.section{padding:4rem 2rem}
+.section-gray{background:var(--page2)}
+.section-white{background:var(--page)}
+.section-dark{background:var(--dark)}
+.section-dark2{background:var(--dark2)}
+
+.container{max-width:900px;margin:0 auto}
+.container-wide{max-width:1080px;margin:0 auto}
+
+/* ── NOTION CALLOUT ── */
+.callout{
+  display:flex;align-items:flex-start;gap:.8rem;
+  background:var(--page2);border:1px solid var(--border);
+  border-radius:var(--radius);padding:1rem 1.1rem;
+  margin:1.2rem 0;
+}
+.callout.orange{background:var(--orange-bg);border-color:rgba(255,107,0,.2)}
+.callout.green{background:rgba(58,107,54,.06);border-color:rgba(58,107,54,.2)}
+.callout.blue{background:var(--blue-bg);border-color:rgba(46,171,204,.2)}
+.callout-icon{font-size:1.1rem;flex-shrink:0;margin-top:.05rem}
+.callout-text{font-size:.9rem;color:var(--ink2);line-height:1.7}
+.callout.orange .callout-text{color:var(--ink)}
+.callout-text strong{color:var(--ink);font-weight:500}
+
+/* ── NOTION TOGGLE / CARD ── */
+.n-card{
+  background:var(--page);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:1.4rem 1.5rem;
+  box-shadow:var(--shadow);transition:box-shadow .2s,border-color .2s;
+  position:relative;
+}
+.n-card:hover{box-shadow:var(--shadow-md);border-color:var(--border2)}
+.n-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;
+  height:3px;border-radius:var(--radius-lg) var(--radius-lg) 0 0;
+}
+.n-card.orange::before{background:var(--orange)}
+.n-card.green::before{background:var(--green2)}
+.n-card.blue::before{background:var(--blue)}
+.n-card.amber::before{background:var(--amber)}
+.n-card.purple::before{background:var(--purple)}
+.n-card.teogreen::before{background:var(--teogreen)}
+.n-card.dark::before{background:var(--dark)}
+
+.n-card-tag{
+  font-family:'Space Mono',monospace;font-size:.58rem;
+  letter-spacing:.14em;color:var(--ink4);text-transform:uppercase;
+  margin-bottom:.5rem;
+}
+.n-card-title{font-size:1rem;font-weight:600;color:var(--ink);margin-bottom:.5rem}
+.n-card-body{font-size:.87rem;color:var(--ink3);line-height:1.68;margin:0}
+
+/* ── SECTION HEADER ── */
+.sec-label{
+  display:flex;align-items:center;gap:.5rem;
+  font-family:'Space Mono',monospace;font-size:.6rem;
+  letter-spacing:.16em;color:var(--orange);text-transform:uppercase;
+  margin-bottom:.8rem;
+}
+.sec-label::before{content:'';display:block;width:14px;height:1px;background:var(--orange)}
+h2.sec-title{
+  font-size:1.9rem;font-weight:700;color:var(--ink);
+  letter-spacing:-.02em;line-height:1.2;margin-bottom:.8rem;
+}
+h2.sec-title .acc{color:var(--orange)}
+h2.sec-title .gacc{color:var(--green2)}
+h2.sec-title .white{color:var(--page)}
+p.sec-body{
+  font-size:.97rem;color:var(--ink2);line-height:1.75;
+  max-width:56ch;margin-bottom:1.2rem;
+}
+
+/* ── FORMULA CHAIN ── */
+.formula-wrap{
+  background:var(--dark);border-radius:var(--radius-lg);
+  padding:2rem;margin:2rem 0;
+  position:relative;overflow:hidden;
+}
+.formula-wrap::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,107,0,.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,107,0,.05) 1px,transparent 1px);
+  background-size:40px 40px;
+}
+.formula-inner{position:relative;z-index:1}
+.formula-label{
+  font-family:'Space Mono',monospace;font-size:.58rem;
+  letter-spacing:.16em;color:var(--orange);text-transform:uppercase;
+  margin-bottom:1.2rem;
+}
+.formula-chain{
+  display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;
+  align-items:center;gap:.4rem;
+}
+.f-node{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:var(--radius);padding:1rem .9rem;text-align:center;
+}
+.f-node.result{
+  background:var(--orange);border-color:var(--orange2);
+}
+.f-node-n{
+  font-family:'Space Mono',monospace;font-size:.5rem;
+  letter-spacing:.12em;color:rgba(255,255,255,.35);
+  text-transform:uppercase;margin-bottom:.3rem;
+}
+.f-node.result .f-node-n{color:rgba(255,255,255,.6)}
+.f-node-t{
+  font-size:.92rem;font-weight:600;color:var(--page);
+  margin-bottom:.3rem;line-height:1.2;
+}
+.f-node.result .f-node-t{font-size:1rem}
+.f-node-d{font-size:.72rem;color:rgba(255,255,255,.45);line-height:1.5;margin:0}
+.f-node.result .f-node-d{color:rgba(255,255,255,.7)}
+.f-op{
+  font-size:1.5rem;font-weight:300;color:var(--orange);
+  opacity:.7;text-align:center;
+}
+
+/* ── TEOBOT SECTION ── */
+.teobot-wrap{
+  display:grid;grid-template-columns:280px 1fr;
+  gap:2.5rem;align-items:start;
+}
+.teobot-card{
+  background:var(--dark);border-radius:var(--radius-lg);
+  padding:2rem;display:flex;flex-direction:column;align-items:center;
+  box-shadow:var(--shadow-md);position:sticky;top:72px;
+}
+.teobot-img{
+  width:160px;height:auto;
+  filter:drop-shadow(0 8px 24px rgba(255,107,0,.25));
+  margin-bottom:1rem;
+}
+.teobot-name{
+  font-family:'Space Mono',monospace;font-size:.7rem;
+  letter-spacing:.14em;color:var(--orange);text-transform:uppercase;
+  margin-bottom:.3rem;
+}
+.teobot-desc{
+  font-size:.8rem;color:rgba(255,255,255,.5);text-align:center;
+  line-height:1.6;margin-bottom:1.2rem;
+}
+.teobot-badge{
+  display:flex;align-items:center;gap:.4rem;
+  background:rgba(125,194,66,.12);border:1px solid rgba(125,194,66,.25);
+  border-radius:20px;padding:.3rem .7rem;
+  font-size:.72rem;color:var(--teogreen);font-weight:500;
+}
+.teobot-versions{width:100%;margin-top:1rem}
+.tv-item{
+  display:flex;align-items:center;gap:.6rem;
+  padding:.4rem 0;border-bottom:1px solid rgba(255,255,255,.06);
+}
+.tv-item:last-child{border-bottom:none}
+.tv-dot{
+  width:8px;height:8px;border-radius:50%;flex-shrink:0;
+}
+.tv-day{
+  font-family:'Space Mono',monospace;font-size:.58rem;
+  color:rgba(255,255,255,.35);min-width:52px;
+}
+.tv-label{font-size:.75rem;color:rgba(255,255,255,.6)}
+
+/* capability items */
+.cap-list{display:flex;flex-direction:column;gap:.5rem}
+.cap-item{
+  display:flex;align-items:flex-start;gap:.8rem;
+  padding:.8rem 1rem;background:var(--page2);
+  border:1px solid var(--border);border-radius:var(--radius);
+  transition:border-color .15s,background .15s;
+}
+.cap-item:hover{background:var(--page);border-color:var(--orange);border-left-width:3px}
+.cap-num{
+  font-family:'Space Mono',monospace;font-size:.58rem;
+  font-weight:700;color:var(--orange);
+  background:var(--orange-bg);padding:.2rem .4rem;
+  border-radius:var(--radius-sm);flex-shrink:0;
+  margin-top:.1rem;
+}
+.cap-title{font-size:.9rem;font-weight:600;color:var(--ink);margin-bottom:.2rem}
+.cap-desc{font-size:.82rem;color:var(--ink3);line-height:1.55;margin:0}
+
+.collab-grid{
+  display:grid;grid-template-columns:1fr auto 1fr;
+  gap:.8rem;align-items:center;margin-top:1.2rem;
+}
+.collab-box-n{
+  background:var(--page2);border:1px solid var(--border);
+  border-radius:var(--radius);padding:1rem;
+}
+.collab-box-n.ter{border-top:2px solid var(--orange)}
+.collab-box-n .cbn-title{
+  font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:.5rem;
+}
+.collab-box-n .cbn-items{list-style:none}
+.collab-box-n .cbn-items li{
+  font-size:.78rem;color:var(--ink3);padding:.2rem 0;
+  display:flex;gap:.4rem;align-items:flex-start;
+}
+.collab-box-n .cbn-items li::before{
+  content:'→';color:var(--orange);font-size:.7rem;flex-shrink:0;margin-top:.05rem;
+}
+.collab-arr{
+  font-size:1.4rem;color:var(--ink4);text-align:center;
+}
+
+/* ── MCI LAYERS ── */
+.mci-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:.5rem;margin:1.2rem 0;
+}
+.mci-item{
+  background:var(--page);border:1px solid var(--border);
+  border-radius:var(--radius);padding:1rem 1rem 1rem 1.3rem;
+  position:relative;transition:box-shadow .15s;
+}
+.mci-item:hover{box-shadow:var(--shadow)}
+.mci-item::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;
+  width:4px;border-radius:var(--radius) 0 0 var(--radius);
+}
+.mci-item:nth-child(1)::before{background:var(--orange)}
+.mci-item:nth-child(2)::before{background:var(--green2)}
+.mci-item:nth-child(3)::before{background:var(--blue)}
+.mci-item:nth-child(4)::before{background:var(--amber)}
+.mci-tag{
+  font-family:'Space Mono',monospace;font-size:.56rem;
+  letter-spacing:.1em;color:var(--ink4);text-transform:uppercase;
+  margin-bottom:.25rem;
+}
+.mci-title{font-size:.9rem;font-weight:600;color:var(--ink);margin-bottom:.25rem}
+.mci-desc{font-size:.8rem;color:var(--ink3);line-height:1.6;margin:0}
+
+/* ── PROFILES ── */
+.profiles-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1rem;margin-top:1.5rem;
+}
+.profile-item{
+  background:var(--page);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:1.4rem;
+  box-shadow:var(--shadow);
+}
+.profile-emoji{font-size:1.8rem;margin-bottom:.6rem}
+.profile-title{font-size:.95rem;font-weight:600;color:var(--ink);margin-bottom:.4rem}
+.profile-desc{font-size:.83rem;color:var(--ink3);line-height:1.65;margin:0}
+
+/* ── TIMELINE ── */
+.timeline-grid{
+  display:flex;flex-direction:column;gap:.4rem;margin-top:1.2rem;
+}
+.tl-item{
+  display:grid;grid-template-columns:100px 1fr;
+  gap:.8rem;align-items:start;
+}
+.tl-left{
+  display:flex;flex-direction:column;align-items:flex-end;
+  padding-top:.8rem;
+}
+.tl-day-badge{
+  font-family:'Space Mono',monospace;font-size:.6rem;
+  font-weight:700;padding:.25rem .5rem;border-radius:20px;
+  white-space:nowrap;
+}
+.tl-right{
+  background:var(--page2);border:1px solid var(--border);
+  border-radius:var(--radius);padding:.8rem 1rem;
+  border-left:3px solid var(--border);
+  transition:border-left-color .2s;
+}
+.tl-right:hover{border-left-color:var(--orange)}
+.tl-title{font-size:.88rem;font-weight:600;color:var(--ink);margin-bottom:.2rem}
+.tl-desc{font-size:.78rem;color:var(--ink3);line-height:1.5;margin:0}
+
+/* ── STATS ── */
+.stats-row{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1px;background:var(--border);border-radius:var(--radius);
+  overflow:hidden;border:1px solid var(--border);
+  margin:1.5rem 0;
+}
+.stat-cell{
+  background:var(--page);padding:1.2rem;text-align:center;
+}
+.stat-n{
+  font-size:2rem;font-weight:700;color:var(--ink);
+  letter-spacing:-.03em;line-height:1;margin-bottom:.3rem;
+}
+.stat-n .acc{color:var(--orange)}
+.stat-l{
+  font-family:'Space Mono',monospace;font-size:.58rem;
+  letter-spacing:.1em;color:var(--ink4);text-transform:uppercase;
+}
+
+/* ── TOOLS GRID ── */
+.tools-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);
+  gap:1rem;margin-top:1.5rem;
+}
+
+/* ── BETA DELIVERABLES ── */
+.beta-row{
+  display:grid;grid-template-columns:repeat(5,1fr);
+  gap:.5rem;margin-top:1.2rem;
+}
+.beta-item{
+  background:var(--page2);border:1px solid var(--border);
+  border-radius:var(--radius);padding:.9rem;
+  border-top:2px solid var(--border);
+  transition:border-top-color .2s,box-shadow .2s;
+}
+.beta-item:hover{box-shadow:var(--shadow);border-top-color:var(--orange)}
+.beta-item:nth-child(1){border-top-color:var(--orange)}
+.beta-item:nth-child(2){border-top-color:var(--blue)}
+.beta-item:nth-child(3){border-top-color:var(--amber)}
+.beta-item:nth-child(4){border-top-color:var(--purple)}
+.beta-item:nth-child(5){border-top-color:var(--green2)}
+.beta-tag{
+  font-family:'Space Mono',monospace;font-size:.54rem;
+  letter-spacing:.1em;color:var(--ink4);text-transform:uppercase;
+  margin-bottom:.3rem;
+}
+.beta-title{font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:.2rem}
+.beta-desc{font-size:.75rem;color:var(--ink3);line-height:1.5;margin:0}
+
+/* ── CTA DARK SECTION ── */
+.cta-wrap{
+  background:var(--dark);border-radius:var(--radius-lg);
+  padding:3rem 2.5rem;position:relative;overflow:hidden;
+  margin:2rem 0;
+}
+.cta-wrap::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,107,0,.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,107,0,.05) 1px,transparent 1px);
+  background-size:44px 44px;
+}
+.cta-wrap::after{
+  content:'+TER';position:absolute;right:-1rem;bottom:-1.5rem;
+  font-family:'DM Sans',sans-serif;font-size:8rem;font-weight:700;
+  color:rgba(255,255,255,.03);line-height:1;pointer-events:none;
+  letter-spacing:-.04em;
+}
+.cta-inner{position:relative;z-index:1;max-width:600px;margin:0 auto;text-align:center}
+.cta-title{
+  font-size:2rem;font-weight:700;color:var(--page);
+  letter-spacing:-.02em;line-height:1.2;margin-bottom:.8rem;
+}
+.cta-body{
+  font-size:.97rem;color:rgba(255,255,255,.55);
+  line-height:1.75;margin-bottom:2rem;font-style:italic;
+}
+.cta-sig{
+  margin-top:1.8rem;padding-top:1.5rem;
+  border-top:1px solid rgba(255,255,255,.1);
+}
+.cta-sig-name{
+  font-size:1.1rem;font-weight:600;color:var(--page);margin-bottom:.2rem;
+}
+.cta-sig-role{
+  font-family:'Space Mono',monospace;font-size:.6rem;
+  letter-spacing:.1em;color:rgba(255,255,255,.35);text-transform:uppercase;
+}
+.cta-btns{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin-bottom:1rem}
+
+/* ── FOOTER ── */
+footer{
+  background:var(--page2);border-top:1px solid var(--border);
+  padding:1.5rem 2rem;
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:1rem;
+}
+.f-brand{display:flex;align-items:center;gap:.5rem}
+.f-logo-box{
+  width:22px;height:22px;background:var(--dark);border-radius:4px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Space Mono',monospace;font-size:.5rem;
+  font-weight:700;color:var(--orange);
+}
+.f-name{font-size:.85rem;font-weight:600;color:var(--ink)}
+.f-meta{font-family:'Space Mono',monospace;font-size:.56rem;letter-spacing:.08em;color:var(--ink4)}
+
+/* ── ANIMATIONS ── */
+.fade-up{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease}
+.fade-up.vis{opacity:1;transform:none}
+
+/* ── NOTION QUOTE ── */
+.n-quote{
+  border-left:4px solid var(--orange);
+  padding:.8rem 1.2rem;margin:1.2rem 0;
+  background:var(--page2);border-radius:0 var(--radius) var(--radius) 0;
+}
+.n-quote p{
+  font-size:.95rem;color:var(--ink2);font-style:italic;
+  line-height:1.7;margin:0;
+}
+
+/* ── INLINE TAG ── */
+.inline-tag{
+  display:inline-flex;align-items:center;gap:.3rem;
+  background:var(--orange-bg);color:var(--orange2);
+  font-size:.75rem;font-weight:500;padding:.1rem .45rem;
+  border-radius:20px;
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:860px){
+  .teobot-wrap{grid-template-columns:1fr}
+  .teobot-card{position:relative;top:0}
+  .formula-chain{grid-template-columns:1fr;gap:.3rem}
+  .f-op{transform:rotate(90deg)}
+  .profiles-grid{grid-template-columns:1fr 1fr}
+  .beta-row{grid-template-columns:repeat(3,1fr)}
+  .collab-grid{grid-template-columns:1fr;gap:.6rem}
+  .collab-arr{transform:rotate(90deg)}
+  .nav-links{display:none}
+  .tools-grid{grid-template-columns:1fr}
+  .mci-grid{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .hero{padding:2.5rem 1.2rem 2rem}
+  .section{padding:2.5rem 1.2rem}
+  .hero-title{font-size:2rem}
+  h2.sec-title{font-size:1.6rem}
+  .profiles-grid{grid-template-columns:1fr}
+  .beta-row{grid-template-columns:1fr 1fr}
+  .stats-row{grid-template-columns:1fr 1fr}
+  .tl-item{grid-template-columns:80px 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════ NAV ═══════ -->
+<nav>
+  <div class="nav-left">
+    <a class="nav-logo" href="#">
+      <div class="nav-logo-icon">+TER</div>
+      Atelier+TER
+    </a>
+    <div class="nav-sep"></div>
+    <span class="nav-page">Reto 80 Días</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#propuesta">Propuesta</a></li>
+    <li><a href="#teobot">TeoBOT</a></li>
+    <li><a href="#formula">Fórmula</a></li>
+    <li><a href="#herramientas">Herramientas</a></li>
+    <li><a href="#perfiles">Perfiles</a></li>
+    <li><a href="#reto">El Reto</a></li>
+  </ul>
+  <a href="#cta" class="nav-cta">Únete →</a>
+</nav>
+
+<!-- ═══════ HERO — Notion page ═══════ -->
+<div class="hero">
+
+  <!-- Cover image -->
+  <div class="hero-cover">
+    <div class="hero-cover-pattern"></div>
+    <div class="hero-cover-accent"></div>
+    <div class="hero-cover-content">
+      <div class="hero-cover-tag">Plataforma de Cocreación Territorial · 2026</div>
+      <div class="hero-cover-date">01 ABR — 19 JUN</div>
+    </div>
+  </div>
+
+  <!-- Breadcrumb -->
+  <div class="hero-breadcrumb fade-up">
+    <span>Atelier+TER</span>
+    <span class="sep">/</span>
+    <span>Retos</span>
+    <span class="sep">/</span>
+    <span style="color:var(--ink)">Reto 80 Días</span>
+  </div>
+
+  <div class="hero-icon fade-up">🌱</div>
+  <h1 class="hero-title fade-up">
+    Un <span class="acc">+TER</span> en Desarrollo<br>Rural Integral
+  </h1>
+  <p class="hero-tagline fade-up">
+    Plataforma de cocreación para el Desarrollo Territorial. 
+    80 días para validar la Fórmula <strong>+TER</strong> y construir 
+    Inteligencia Territorial desde adentro.
+  </p>
+
+  <!-- Properties table — Notion style -->
+  <div class="props-table fade-up">
+    <div class="props-row">
+      <div class="prop-key"><span class="prop-key-icon">👤</span> De</div>
+      <div class="prop-val">Alexander Taborda — Líder Cafetero y Agente de Integración Tecnológica</div>
+    </div>
+    <div class="props-row">
+      <div class="prop-key"><span class="prop-key-icon">👥</span> Para</div>
+      <div class="prop-val">
+        <span class="prop-tag tag-green">Líderes territoriales</span>
+        <span class="prop-tag tag-blue">Estudiantes</span>
+        <span class="prop-tag tag-gray">Profesionales rurales</span>
+      </div>
+    </div>
+    <div class="props-row">
+      <div class="prop-key"><span class="prop-key-icon">📅</span> Inicio</div>
+      <div class="prop-val"><span class="prop-tag tag-orange">07 de Abril · 2026</span></div>
+    </div>
+    <div class="props-row">
+      <div class="prop-key"><span class="prop-key-icon">⏱️</span> Duración</div>
+      <div class="prop-val">80 días · 12 semanas</div>
+    </div>
+    <div class="props-row">
+      <div class="prop-key"><span class="prop-key-icon">📍</span> Sede</div>
+      <div class="prop-val">Entorno digital con anclaje en Andes, Antioquia</div>
+    </div>
+    <div class="props-row">
+      <div class="prop-key"><span class="prop-key-icon">🔖</span> Estado</div>
+      <div class="prop-val"><span class="prop-tag tag-orange">🟠 Convocatoria abierta</span></div>
+    </div>
+    <div class="props-row">
+      <div class="prop-key"><span class="prop-key-icon">📂</span> Formato</div>
+      <div class="prop-val">Híbrido — teoría + práctica + misiones reales</div>
+    </div>
+  </div>
+
+  <div class="hero-btns fade-up">
+    <a href="#cta" class="btn-primary">🚀 Quiero participar</a>
+    <a href="#propuesta" class="btn-secondary">Leer la propuesta</a>
+    <a href="#teobot" class="btn-secondary">Conocer TeoBOT</a>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- ═══════ PROPUESTA ═══════ -->
+<section class="section section-white" id="propuesta">
+  <div class="container fade-up">
+
+    <div class="sec-label">Presentación de la iniciativa</div>
+    <h2 class="sec-title">Una invitación personal a<br><span class="acc">co-crear</span> el futuro rural.</h2>
+
+    <p class="sec-body">
+      Como caficultor y representante gremial con más de 10 años de trayectoria 
+      en la gestión de proyectos, he evidenciado cómo nuestras organizaciones 
+      rurales reaccionan a las crisis sin una estrategia clara ni las 
+      herramientas adecuadas.
+    </p>
+    <p class="sec-body">
+      Por ello, les extiendo una invitación personal para validar y co-crear 
+      <strong class="inline-tag">+TER (Tecnología + Economía + Ruralidad)</strong>, 
+      una plataforma diseñada desde la realidad de nuestros territorios, 
+      pero con una mirada global.
+    </p>
+
+    <div class="callout orange">
+      <span class="callout-icon">💡</span>
+      <div class="callout-text">
+        <strong>El desafío:</strong> durante los 80 días trabajaremos en un entorno 
+        de co-creación, poniendo a prueba metodologías de 
+        <strong>Aprendizaje Basado en Contexto</strong> y herramientas de 
+        <strong>Inteligencia Artificial</strong> que buscan convertir la experiencia 
+        empírica de nuestros líderes en <strong>Inteligencia Territorial</strong> — 
+        nuestro activo compartido.
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-cell">
+        <div class="stat-n"><span class="acc">+10</span></div>
+        <div class="stat-l">Años de trayectoria territorial</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-n"><span class="acc">80</span></div>
+        <div class="stat-l">Días de co-creación activa</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-n"><span class="acc">5</span></div>
+        <div class="stat-l">Organizaciones en red</div>
+      </div>
+    </div>
+
+    <div class="n-quote">
+      <p>"Nuestra misión es cultivar y construir el desarrollo rural integral 
+      desde las capacidades que ya habitan en el territorio, 
+      potenciándolas con la tecnología adecuada."</p>
+    </div>
+
+    <div class="callout green" style="margin-top:1rem">
+      <span class="callout-icon">🌿</span>
+      <div class="callout-text">
+        <strong>Filosofía del reto:</strong> No buscamos soluciones mágicas. 
+        Buscamos desarrollar la capacidad de realizar las 
+        <strong>preguntas correctas</strong> para encontrar respuestas juntos.
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ═══════ TEOBOT ═══════ -->
+<section class="section dot-bg" id="teobot">
+  <div class="container fade-up">
+
+    <div class="sec-label">Herramienta principal del sistema</div>
+    <h2 class="sec-title">TeoBOT: agente de <span class="acc">Inteligencia<br>Territorial</span> para líderes rurales.</h2>
+
+    <div class="teobot-wrap">
+
+      <!-- Left: sticky card -->
+      <div class="teobot-card">
+        <img src="/mnt/user-data/uploads/TeoBOT-02.png"
+             alt="TeoBOT — Agente de IA +TER"
+             class="teobot-img"
+             onerror="this.style.display='none'">
+        <div class="teobot-name">TeoBOT</div>
+        <div class="teobot-desc">Agente de IA creado y adaptado para los Agentes de Integración +TER</div>
+        <div class="teobot-badge">
+          <span style="width:7px;height:7px;border-radius:50%;background:var(--teogreen)"></span>
+          Activo desde el Día 10
+        </div>
+        <div class="teobot-versions">
+          <div class="tv-item">
+            <div class="tv-dot" style="background:var(--ink4)"></div>
+            <div class="tv-day">Días 1-9</div>
+            <div class="tv-label">Preparación y configuración</div>
+          </div>
+          <div class="tv-item">
+            <div class="tv-dot" style="background:var(--orange)"></div>
+            <div class="tv-day">Día 10</div>
+            <div class="tv-label">PMV activo · primera demo</div>
+          </div>
+          <div class="tv-item">
+            <div class="tv-dot" style="background:var(--amber)"></div>
+            <div class="tv-day">Días 25-45</div>
+            <div class="tv-label">Asistente en misiones</div>
+          </div>
+          <div class="tv-item">
+            <div class="tv-dot" style="background:var(--purple)"></div>
+            <div class="tv-day">Días 46-65</div>
+            <div class="tv-label">Agente autónomo</div>
+          </div>
+          <div class="tv-item">
+            <div class="tv-dot" style="background:var(--teogreen)"></div>
+            <div class="tv-day">Día 80</div>
+            <div class="tv-label">Beta v1.0 lista</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: capabilities -->
+      <div>
+        <p style="color:var(--ink2);font-size:.95rem;line-height:1.75;margin-bottom:1.2rem">
+          TeoBOT no es un chatbot genérico. Es un agente de IA creado 
+          específicamente para acompañar a líderes rurales en el conocimiento, 
+          gestión y acción sobre su territorio. Se entrena con datos reales 
+          del contexto — no con respuestas genéricas.
+        </p>
+
+        <div class="cap-list">
+          <div class="cap-item">
+            <div class="cap-num">C-01</div>
+            <div>
+              <div class="cap-title">Conversa en contexto</div>
+              <div class="cap-desc">Responde sobre el territorio rural cafetero con precisión y pertinencia local. Entiende la diferencia entre "campo" y "ruralidad".</div>
+            </div>
+          </div>
+          <div class="cap-item">
+            <div class="cap-num">C-02</div>
+            <div>
+              <div class="cap-title">Asiste misiones</div>
+              <div class="cap-desc">Guía al líder paso a paso en la ejecución de proyectos sin requerir intervención directa. Disponible 24/7.</div>
+            </div>
+          </div>
+          <div class="cap-item">
+            <div class="cap-num">C-03</div>
+            <div>
+              <div class="cap-title">Registra aprendizajes</div>
+              <div class="cap-desc">Captura cada interacción y la incorpora automáticamente al Mapa de Contexto Integrado. El territorio aprende con cada uso.</div>
+            </div>
+          </div>
+          <div class="cap-item">
+            <div class="cap-num">C-04</div>
+            <div>
+              <div class="cap-title">Conecta herramientas</div>
+              <div class="cap-desc">Identifica qué recursos del cluster +TER son pertinentes para el problema específico de cada misión activa.</div>
+            </div>
+          </div>
+          <div class="cap-item">
+            <div class="cap-num">C-05</div>
+            <div>
+              <div class="cap-title">Reporta avances</div>
+              <div class="cap-desc">Genera informes de progreso verificables para el grupo de seguimiento y las organizaciones participantes.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout" style="margin-top:1.2rem">
+          <span class="callout-icon">🤝</span>
+          <div>
+            <strong style="color:var(--ink)">Cooperación Humano ↔ TeoBOT</strong>
+            <div class="collab-grid" style="margin-top:.8rem">
+              <div class="collab-box-n">
+                <div class="cbn-title">Agente de Integración</div>
+                <ul class="cbn-items">
+                  <li>Decide e interpreta</li>
+                  <li>Conoce el contexto invisible</li>
+                  <li>Valida y actúa en territorio</li>
+                </ul>
+              </div>
+              <div class="collab-arr">⇄</div>
+              <div class="collab-box-n ter">
+                <div class="cbn-title">TeoBOT · IA</div>
+                <ul class="cbn-items">
+                  <li>Procesa y conecta datos</li>
+                  <li>Sugiere y amplifica</li>
+                  <li>Registra y actualiza MCI</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ═══════ FÓRMULA ═══════ -->
+<section class="section section-white" id="formula">
+  <div class="container fade-up">
+
+    <div class="sec-label">Lo que se valida en el reto</div>
+    <h2 class="sec-title">La Fórmula <span class="acc">+TER</span></h2>
+    <p class="sec-body">
+      Tres elementos inseparables. Un resultado: 
+      <strong>Inteligencia Territorial</strong> — la capacidad colectiva 
+      de conocer el contexto y tomar decisiones basadas en datos 
+      reales del territorio.
+    </p>
+
+    <div class="formula-wrap">
+      <div class="formula-inner">
+        <div class="formula-label">Fórmula +TER</div>
+        <div class="formula-chain">
+          <div class="f-node">
+            <div class="f-node-n">Elemento 01</div>
+            <div class="f-node-t">Conocimiento del Contexto</div>
+            <div class="f-node-d">¿Qué sabe el líder sobre su territorio, historia y recursos?</div>
+          </div>
+          <div class="f-op">+</div>
+          <div class="f-node">
+            <div class="f-node-n">Elemento 02</div>
+            <div class="f-node-t">Desarrollo de Habilidades</div>
+            <div class="f-node-d">¿Qué capacidades tiene para leer y actuar sobre ese conocimiento?</div>
+          </div>
+          <div class="f-op">+</div>
+          <div class="f-node">
+            <div class="f-node-n">Elemento 03</div>
+            <div class="f-node-t">Uso de Herramientas</div>
+            <div class="f-node-d">¿Cómo amplifica su impacto con IA apropiada al contexto?</div>
+          </div>
+          <div class="f-op">=</div>
+          <div class="f-node result">
+            <div class="f-node-n">Resultado</div>
+            <div class="f-node-t">INTELIGENCIA TERRITORIAL</div>
+            <div class="f-node-d">Capacidad de incidir en el territorio con conciencia situacional y datos reales.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem;margin-top:1.5rem">
+      <div class="callout">
+        <span class="callout-icon">🧭</span>
+        <div class="callout-text"><strong>Conciencia situacional:</strong> saber qué está pasando, por qué y qué viene.</div>
+      </div>
+      <div class="callout">
+        <span class="callout-icon">📊</span>
+        <div class="callout-text"><strong>Conocimiento contextual:</strong> datos del territorio procesados y organizados.</div>
+      </div>
+      <div class="callout">
+        <span class="callout-icon">⚡</span>
+        <div class="callout-text"><strong>Capacidad de decisión:</strong> transformar datos en acciones pertinentes.</div>
+      </div>
+      <div class="callout">
+        <span class="callout-icon">🌍</span>
+        <div class="callout-text"><strong>Incidencia real:</strong> gestionar y transformar el territorio con autonomía.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ═══════ HERRAMIENTAS ═══════ -->
+<section class="section dot-bg" id="herramientas">
+  <div class="container fade-up">
+
+    <div class="sec-label">Conceptos y herramientas a validar</div>
+    <h2 class="sec-title">Los participantes tendrán acceso e<br>influencia sobre el desarrollo de:</h2>
+    <p class="sec-body">
+      Un ecosistema integrado de herramientas donde cada una conecta con las 
+      demás a través del MCI. No aplicaciones aisladas — un sistema coordinado 
+      por TeoBOT.
+    </p>
+
+    <div class="tools-grid">
+      <div class="n-card orange">
+        <div class="n-card-tag">Herramienta 01 · Principal</div>
+        <div class="n-card-title">🤖 TeoBOT</div>
+        <div class="n-card-body">Nuestra herramienta principal de IA para la gestión del conocimiento territorial. Agente conversacional entrenado con datos reales del territorio cafetero. Se versiona con la participación del equipo durante los 80 días.</div>
+      </div>
+      <div class="n-card teogreen">
+        <div class="n-card-tag">Herramienta 02 · Estratégica</div>
+        <div class="n-card-title">🗺️ Mapa de Contexto Integrado</div>
+        <div class="n-card-body">Sistema para visualizar y entender las dinámicas locales. Cuatro capas de información del territorio. La memoria viva del reto que crece con cada misión y persiste más allá del proceso.</div>
+      </div>
+      <div class="n-card blue">
+        <div class="n-card-tag">Herramienta 03 · Operativa</div>
+        <div class="n-card-title">🔗 Mi-Clouster</div>
+        <div class="n-card-body">Modelo de gestión que facilita la colaboración real entre los agentes de la red. Integra herramientas, actores y misiones en un sistema orientado a resultados territoriales concretos y medibles.</div>
+      </div>
+      <div class="n-card amber">
+        <div class="n-card-tag">Herramienta 04 · Formativa</div>
+        <div class="n-card-title">📚 Desarrollo de Skills</div>
+        <div class="n-card-body">Metodologías para potenciar capacidades de liderazgo: Cocreación, Aprendizaje Basado en Proyectos, Aprendizaje Contextual y el Método COA (Comunicación · Organización · Acción).</div>
+      </div>
+    </div>
+
+    <!-- MCI Layers -->
+    <div style="margin-top:2rem">
+      <div class="sec-label">Las 4 capas del Mapa de Contexto Integrado</div>
+      <div class="mci-grid">
+        <div class="mci-item">
+          <div class="mci-tag">Capa 01 — Bio-física</div>
+          <div class="mci-title">Suelo, clima y ecosistema</div>
+          <div class="mci-desc">Altitud, precipitación, temperatura, biodiversidad y comportamiento de la tierra caficultora.</div>
+        </div>
+        <div class="mci-item">
+          <div class="mci-tag">Capa 02 — Socio-cultural</div>
+          <div class="mci-title">Comunidad y conocimiento</div>
+          <div class="mci-desc">Redes de confianza, saberes tradicionales, dinámicas organizativas y capital social acumulado.</div>
+        </div>
+        <div class="mci-item">
+          <div class="mci-tag">Capa 03 — Económica</div>
+          <div class="mci-title">Valor y flujos productivos</div>
+          <div class="mci-desc">Cadenas de valor, estructuras de precio, acceso a mercados y economía solidaria local.</div>
+        </div>
+        <div class="mci-item">
+          <div class="mci-tag">Capa 04 — Vigilancia Activa</div>
+          <div class="mci-title">Tendencias e inteligencia</div>
+          <div class="mci-desc">Monitoreo de mercados, innovación en cafés de especialidad y alertas estratégicas del sector.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ═══════ PERFILES ═══════ -->
+<section class="section section-white" id="perfiles">
+  <div class="container fade-up">
+
+    <div class="sec-label">Perfil del colaborador</div>
+    <h2 class="sec-title">Busco personas dispuestas a<br><span class="acc">romper paradigmas</span><br>sobre la ruralidad.</h2>
+
+    <div class="profiles-grid">
+      <div class="profile-item">
+        <div class="profile-emoji">🌾</div>
+        <div class="profile-title">Líderes de Organizaciones</div>
+        <div class="profile-desc">Que desean desarrollar habilidades e integrar herramientas para una gestión inteligente de sus entidades. Con mandato real y disposición para experimentar nuevas formas de liderazgo territorial.</div>
+      </div>
+      <div class="profile-item">
+        <div class="profile-emoji">🎓</div>
+        <div class="profile-title">Profesionales y Estudiantes</div>
+        <div class="profile-desc">Que deseen aplicar sus conocimientos en un entorno rural con retos y desafíos reales. Conectar la academia con la práctica territorial desde el primer día del reto.</div>
+      </div>
+      <div class="profile-item">
+        <div class="profile-emoji">⚡</div>
+        <div class="profile-title">Agentes de Cambio</div>
+        <div class="profile-desc">Con visión crítica y capacidad de trabajar en red. Personas que entienden que el cambio rural se construye desde las capacidades que ya habitan en el territorio.</div>
+      </div>
+    </div>
+
+    <div class="n-quote" style="margin-top:1.5rem">
+      <p>"Los participantes tendrán acceso y capacidad de influencia sobre el 
+      desarrollo de las herramientas. No son usuarios pasivos — son 
+      co-creadores del sistema."</p>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ═══════ EL RETO ═══════ -->
+<section class="section dot-bg" id="reto">
+  <div class="container fade-up">
+
+    <div class="sec-label">Estructura del reto · 80 días</div>
+    <h2 class="sec-title">Dos fases. <span class="gacc">Cinco misiones.</span><br>Una beta operativa.</h2>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem">
+      <div class="n-card orange">
+        <div class="n-card-tag">Fase 1 · Días 1-10</div>
+        <div class="n-card-title">Introducción y conceptos clave</div>
+        <div class="n-card-body">IA Generativa · Notion · Notebook LM · Claude · Fórmula +TER · TeoBOT PMV activo el Día 10.</div>
+        <div class="callout orange" style="margin-top:.8rem;padding:.6rem .8rem">
+          <span class="callout-icon" style="font-size:.85rem">📋</span>
+          <div class="callout-text" style="font-size:.8rem">Día 1-3: Encuesta de saberes previos = línea base del MCI v0.0</div>
+        </div>
+      </div>
+      <div class="n-card green">
+        <div class="n-card-tag">Fase 2 · Días 10-80</div>
+        <div class="n-card-title">Misiones con TeoBOT</div>
+        <div class="n-card-body">Misión principal: Granja DIS · 4 misiones adicionales con metodologías elegidas por cada grupo según sus requerimientos y contexto.</div>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="sec-label">Cronograma de hitos</div>
+    <div class="timeline-grid">
+      <div class="tl-item">
+        <div class="tl-left">
+          <span class="tl-day-badge" style="background:var(--orange-bg);color:var(--orange2)">Día 1</span>
+        </div>
+        <div class="tl-right">
+          <div class="tl-title">Kick-off · Encuesta de saberes previos (MCI v0.0)</div>
+          <div class="tl-desc">Línea base de Inteligencia Territorial. Punto de partida de la evaluación del reto.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left">
+          <span class="tl-day-badge" style="background:rgba(125,194,66,.12);color:var(--teogreen)">Día 10</span>
+        </div>
+        <div class="tl-right">
+          <div class="tl-title">TeoBOT PMV en vivo · Primera demostración</div>
+          <div class="tl-desc">El agente entra al proceso. Primeras misiones con colaboración humano-IA.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left">
+          <span class="tl-day-badge" style="background:var(--amber-bg);color:var(--amber)">Día 45</span>
+        </div>
+        <div class="tl-right">
+          <div class="tl-title">Hito 2 · Demo TeoBOT v0.2 + Portafolio parcial</div>
+          <div class="tl-desc">Presentación al grupo de seguimiento con resultados verificables de las misiones.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left">
+          <span class="tl-day-badge" style="background:var(--purple-bg);color:var(--purple)">Día 65</span>
+        </div>
+        <div class="tl-right">
+          <div class="tl-title">Hito 3 · Misión principal completada</div>
+          <div class="tl-desc">Resultados de Granja DIS. Validación del método con evidencia real del territorio.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left">
+          <span class="tl-day-badge" style="background:rgba(58,107,54,.1);color:var(--green)">Día 80</span>
+        </div>
+        <div class="tl-right" style="border-left-color:var(--green2)">
+          <div class="tl-title">Beta +TER v1.0 · MCI v1.0 · Evaluación final</div>
+          <div class="tl-desc">Comparación MCI v0.0 vs v1.0 = Inteligencia Territorial ganada. Lanzamiento de la plataforma.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Beta deliverables -->
+    <div style="margin-top:2rem">
+      <div class="sec-label">5 Entregables de la beta al día 80</div>
+      <div class="beta-row">
+        <div class="beta-item">
+          <div class="beta-tag">B01</div>
+          <div class="beta-title">TeoBOT v1.0</div>
+          <div class="beta-desc">Agente IA validado en contexto real</div>
+        </div>
+        <div class="beta-item">
+          <div class="beta-tag">B02</div>
+          <div class="beta-title">Modelo capacitación</div>
+          <div class="beta-desc">Validado con líderes del territorio</div>
+        </div>
+        <div class="beta-item">
+          <div class="beta-tag">B03</div>
+          <div class="beta-title">Cluster herramientas</div>
+          <div class="beta-desc">Operando en proyectos reales</div>
+        </div>
+        <div class="beta-item">
+          <div class="beta-tag">B04</div>
+          <div class="beta-title">Método validación</div>
+          <div class="beta-desc">Fórmula +TER probada</div>
+        </div>
+        <div class="beta-item">
+          <div class="beta-tag">B05</div>
+          <div class="beta-title">Portafolio 2026</div>
+          <div class="beta-desc">Comunidad activa + MCI v1.0</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ CTA ═══════ -->
+<section class="section section-white" id="cta">
+  <div class="container fade-up">
+
+    <div class="cta-wrap">
+      <div class="cta-inner">
+        <div class="cta-title">Si estás listo para aportar<br>y co-crear.</div>
+        <div class="cta-body">
+          "Nuestra misión es cultivar y construir el desarrollo rural integral 
+          desde las capacidades que ya habitan en el territorio, 
+          potenciándolas con la tecnología adecuada."
+        </div>
+        <div class="cta-btns">
+          <a href="mailto:contacto@atelierter.co" class="btn-orange">🚀 Quiero participar →</a>
+          <a href="#propuesta" class="btn-secondary" style="color:rgba(255,255,255,.6);border-color:rgba(255,255,255,.15)">Revisar la propuesta</a>
+        </div>
+        <div class="cta-sig">
+          <div class="cta-sig-name">Alexander Taborda</div>
+          <div class="cta-sig-role">Caficultor y Agente de Integración Tecnológica · Andes — Antioquia, Colombia</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:1.5rem">
+      <span class="callout-icon">📬</span>
+      <div class="callout-text">
+        <strong>Asunto de la convocatoria:</strong> Co-creación: El Reto de los 80 días para el Desarrollo Territorial. 
+        Fecha de inicio: <strong>07 de Abril de 2026</strong>. 
+        Sede: Entorno digital con anclaje en el territorio (Andes, Antioquia).
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ FOOTER ═══════ -->
+<footer>
+  <div class="f-brand">
+    <div class="f-logo-box">+TER</div>
+    <span class="f-name">Atelier+TER</span>
+  </div>
+  <div class="f-meta">Plataforma de Cocreación Territorial · Andes, Antioquia · 2026</div>
+  <div class="f-meta">Un +TER en Desarrollo Rural Integral · Reto 80 Días</div>
+</footer>
+
+<script>
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis')});
+},{threshold:0.06,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
